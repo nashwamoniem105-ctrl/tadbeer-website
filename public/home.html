@@ -84,7 +84,12 @@ function hideAuthLinks() {
           if (isServiceRequest(element.textContent) && /\/services\/details\/1766(?:\/|$)/i.test(window.location.pathname)) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            window.location.assign('/monthly-order.html');
+            var currentLang = localStorage.getItem('lang') || 'ar';
+            if (currentLang === 'en') {
+              window.location.assign('/monthly-order-en.html');
+            } else {
+              window.location.assign('/monthly-order.html');
+            }
           }
         }, true);
         var observer = new MutationObserver(hideAuthLinks);

@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طلب خدمة مدبرة - شركة تدبير</title>
-    <!-- استيراد الخطوط الأصلية من معاون -->
+    <title>Request Modabera Service - Tadbeer Company</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="mawanoi-assets/index.css">
     <style>
         :root {
-            --primary: #152650; /* لون معاون الأصلي للاتساق الاحترافي */
+            --primary: #152650;
             --accent: #78182b;
             --background: #fefbf8;
             --foreground: #0b152c;
@@ -66,14 +65,6 @@
             background: linear-gradient(to right, #152650, #78182b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            white-space: nowrap;
-        }
-        h1 {
-            white-space: nowrap;
-            font-size: 2.25rem !important; /* تصغير الحجم لضمان الظهور */
-        }
-        @media (max-width: 768px) {
-            h1 { font-size: 1.75rem !important; }
         }
         .section-icon-container {
             width: 40px;
@@ -94,6 +85,7 @@
             border-radius: 1.25rem;
             padding: 1.25rem;
             position: relative;
+            text-align: left;
         }
         .option-card:hover {
             border-color: rgba(120, 24, 43, 0.4);
@@ -150,9 +142,6 @@
             color: var(--accent);
             transform: translateY(-1px);
         }
-        .counter-btn:active {
-            transform: translateY(0);
-        }
         .counter-value {
             font-size: 24px;
             font-weight: 900;
@@ -187,16 +176,27 @@
             background: var(--accent);
             transform: scale(1.02);
         }
+        .badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            border-radius: 9999px;
+            padding: 0.125rem 0.625rem;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .badge-gray { background: #f3f4f6; color: var(--accent); }
+        .badge-accent { background: var(--accent); color: white; }
     </style>
 </head>
 <body>
     <header class="tadbeer-header">
         <div class="tadbeer-logo">
-            <img src="media/kv4pfeid/logo-website-10-4.png" alt="تدبير">
+            <img src="media/kv4pfeid/logo-website-10-4.png" alt="Tadbeer">
         </div>
         <a href="/home" class="back-link">
-            الرجوع للرئيسية
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg)"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            Back to Home
         </a>
     </header>
 
@@ -204,10 +204,10 @@
         <div class="container mx-auto px-6">
             <span class="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1.5 text-xs font-bold text-accent">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path></svg>
-                عقود مرنة بأسعار توفّر لك أكثر
+                Flexible contracts at prices that save you more
             </span>
-            <h1 class="mt-5 text-4xl font-black leading-tight text-primary lg:text-5xl">عمالة منزلية <span class="gradient-hero-text">بالشهر</span></h1>
-            <p class="mt-4 max-w-2xl text-lg text-muted-foreground">اختر مدة العقد، نوع الخدمة، الجنسية، ونمط الدوام — وحدّد موعد بدء الخدمة بكل سهولة.</p>
+            <h1 class="mt-5 text-4xl font-black leading-tight text-primary lg:text-5xl" style="white-space: nowrap;">Domestic Worker <span class="gradient-hero-text">Monthly</span></h1>
+            <p class="mt-4 max-w-2xl text-lg text-muted-foreground">Choose contract duration, service type, nationality, and shift pattern — and set the service start date with ease.</p>
         </div>
     </section>
 
@@ -220,41 +220,41 @@
                         <div class="section-icon-container">1</div>
                         <div class="flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 2v4"></path><path d="M16 2v4"></path></svg>
-                            <h2 class="text-xl font-black text-primary">اختيار مدة العقد</h2>
+                            <h2 class="text-xl font-black text-primary">Choose Contract Duration</h2>
                         </div>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        <div class="option-card" onclick="select('duration', 'أسبوعان', 640, this)">
-                            <span class="absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-secondary text-accent">14 زيارة</span>
-                            <div class="text-xl font-black text-primary">أسبوعان</div>
-                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">640 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        <div class="option-card" onclick="select('duration', 'Two Weeks', 640, this)">
+                            <span class="badge badge-gray">14 Visits</span>
+                            <div class="text-xl font-black text-primary">Two Weeks</div>
+                            <div class="mt-2 text-sm text-muted-foreground">Total Price</div>
+                            <div class="text-xl font-black text-primary">640 <span class="text-sm font-bold text-accent">AED</span></div>
                         </div>
-                        <div class="option-card" onclick="select('duration', 'شهر', 1280, this)">
-                            <div class="text-xl font-black text-primary">شهر</div>
-                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">1,280 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        <div class="option-card" onclick="select('duration', 'One Month', 1280, this)">
+                            <div class="text-xl font-black text-primary">One Month</div>
+                            <div class="mt-2 text-sm text-muted-foreground">Total Price</div>
+                            <div class="text-xl font-black text-primary">1,280 <span class="text-sm font-bold text-accent">AED</span></div>
                         </div>
-                        <div class="option-card" onclick="select('duration', 'شهران', 2560, this)">
-                            <div class="text-xl font-black text-primary">شهران</div>
-                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">2,560 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        <div class="option-card" onclick="select('duration', 'Two Months', 2560, this)">
+                            <div class="text-xl font-black text-primary">Two Months</div>
+                            <div class="mt-2 text-sm text-muted-foreground">Total Price</div>
+                            <div class="text-xl font-black text-primary">2,560 <span class="text-sm font-bold text-accent">AED</span></div>
                         </div>
-                        <div class="option-card" onclick="select('duration', '3 شهور', 3840, this)">
-                            <div class="text-xl font-black text-primary">3 شهور</div>
-                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">3,840 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        <div class="option-card" onclick="select('duration', '3 Months', 3840, this)">
+                            <div class="text-xl font-black text-primary">3 Months</div>
+                            <div class="mt-2 text-sm text-muted-foreground">Total Price</div>
+                            <div class="text-xl font-black text-primary">3,840 <span class="text-sm font-bold text-accent">AED</span></div>
                         </div>
-                        <div class="option-card" onclick="select('duration', '6 شهور', 7000, this)">
-                            <div class="text-xl font-black text-primary">6 شهور</div>
-                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">7,000 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        <div class="option-card" onclick="select('duration', '6 Months', 7000, this)">
+                            <div class="text-xl font-black text-primary">6 Months</div>
+                            <div class="mt-2 text-sm text-muted-foreground">Total Price</div>
+                            <div class="text-xl font-black text-primary">7,000 <span class="text-sm font-bold text-accent">AED</span></div>
                         </div>
-                        <div class="option-card" onclick="select('duration', 'سنة كاملة', 13500, this)">
-                            <span class="absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-accent text-white">الأوفر</span>
-                            <div class="text-xl font-black text-primary">سنة كاملة</div>
-                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">13,500 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        <div class="option-card" onclick="select('duration', 'Full Year', 13500, this)">
+                            <span class="badge badge-accent">Best Offer</span>
+                            <div class="text-xl font-black text-primary">Full Year</div>
+                            <div class="mt-2 text-sm text-muted-foreground">Total Price</div>
+                            <div class="text-xl font-black text-primary">13,500 <span class="text-sm font-bold text-accent">AED</span></div>
                         </div>
                     </div>
                 </section>
@@ -265,44 +265,44 @@
                         <div class="section-icon-container">2</div>
                         <div class="flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            <h2 class="text-xl font-black text-primary">اختيار الخدمة المطلوبة</h2>
+                            <h2 class="text-xl font-black text-primary">Choose Required Service</h2>
                         </div>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="option-card flex items-start gap-4" onclick="select('service', 'عاملة منزلية', null, this)">
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'Housemaid', null, this)">
                             <div class="service-icon-box">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                             </div>
                             <div class="flex-1">
-                                <h3 class="text-lg font-bold text-primary">عاملة منزلية</h3>
-                                <p class="mt-1 text-sm text-muted-foreground">تنظيف، غسيل، طبخ، رعاية أطفال</p>
+                                <h3 class="text-lg font-bold text-primary">Housemaid</h3>
+                                <p class="mt-1 text-sm text-muted-foreground">Cleaning, Laundry, Cooking, Childcare</p>
                             </div>
                         </div>
-                        <div class="option-card flex items-start gap-4" onclick="select('service', 'طبّاخة', null, this)">
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'Cook', null, this)">
                             <div class="service-icon-box">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path><path d="M6 17h12"></path></svg>
                             </div>
                             <div class="flex-1">
-                                <h3 class="text-lg font-bold text-primary">طبّاخة</h3>
-                                <p class="mt-1 text-sm text-muted-foreground">تحضير وجبات يومية متنوّعة</p>
+                                <h3 class="text-lg font-bold text-primary">Cook</h3>
+                                <p class="mt-1 text-sm text-muted-foreground">Preparation of diverse daily meals</p>
                             </div>
                         </div>
-                        <div class="option-card flex items-start gap-4" onclick="select('service', 'رعاية أطفال', null, this)">
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'Childcare', null, this)">
                             <div class="service-icon-box">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"></path><path d="M15 12h.01"></path><path d="M19.38 6.813A9 9 0 0 1 20.8 10.2a2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"></path><path d="M9 12h.01"></path></svg>
                             </div>
                             <div class="flex-1">
-                                <h3 class="text-lg font-bold text-primary">رعاية أطفال</h3>
-                                <p class="mt-1 text-sm text-muted-foreground">مربية مدرّبة وموثوقة</p>
+                                <h3 class="text-lg font-bold text-primary">Childcare</h3>
+                                <p class="mt-1 text-sm text-muted-foreground">Trained and reliable nanny</p>
                             </div>
                         </div>
-                        <div class="option-card flex items-start gap-4" onclick="select('service', 'سائق خاص', null, this)">
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'Private Driver', null, this)">
                             <div class="service-icon-box">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>
                             </div>
                             <div class="flex-1">
-                                <h3 class="text-lg font-bold text-primary">سائق خاص</h3>
-                                <p class="mt-1 text-sm text-muted-foreground">توصيل آمن داخل الإمارات</p>
+                                <h3 class="text-lg font-bold text-primary">Private Driver</h3>
+                                <p class="mt-1 text-sm text-muted-foreground">Safe transportation within UAE</p>
                             </div>
                         </div>
                     </div>
@@ -314,17 +314,17 @@
                         <div class="section-icon-container">3</div>
                         <div class="flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                            <h2 class="text-xl font-black text-primary">نوع الخدمة</h2>
+                            <h2 class="text-xl font-black text-primary">Service Type</h2>
                         </div>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="option-card" onclick="select('type', 'زيارات', null, this)">
-                            <h3 class="text-lg font-bold text-primary">زيارات</h3>
-                            <p class="mt-1 text-sm text-muted-foreground">دوام نهاري بدون مبيت</p>
+                        <div class="option-card" onclick="select('type', 'Visits', null, this)">
+                            <h3 class="text-lg font-bold text-primary">Visits</h3>
+                            <p class="mt-1 text-sm text-muted-foreground">Daytime shift without stay-in</p>
                         </div>
-                        <div class="option-card" onclick="select('type', 'مبيت', null, this)">
-                            <h3 class="text-lg font-bold text-primary">مبيت</h3>
-                            <p class="mt-1 text-sm text-muted-foreground">إقامة كاملة لدى الأسرة</p>
+                        <div class="option-card" onclick="select('type', 'Stay-in', null, this)">
+                            <h3 class="text-lg font-bold text-primary">Stay-in</h3>
+                            <p class="mt-1 text-sm text-muted-foreground">Full-time residency with family</p>
                         </div>
                     </div>
                 </section>
@@ -335,7 +335,7 @@
                         <div class="section-icon-container">4</div>
                         <div class="flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                            <h2 class="text-xl font-black text-primary">عدد العمالة المطلوب</h2>
+                            <h2 class="text-xl font-black text-primary">Number of Workers Required</h2>
                         </div>
                     </div>
                     <div class="counter-container">
@@ -344,7 +344,7 @@
                         </button>
                         <div class="flex flex-col items-center mx-6">
                             <span class="counter-value" id="workers-count" style="margin:0; line-height:1;">1</span>
-                            <span class="text-[10px] font-bold text-muted-foreground mt-1">عامل/عاملة</span>
+                            <span class="text-[10px] font-bold text-muted-foreground mt-1">Worker(s)</span>
                         </div>
                         <button class="counter-btn" onclick="updateWorkers(1)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
@@ -356,28 +356,28 @@
                 <section class="rounded-3xl border border-border bg-card/40 p-7">
                     <div class="mb-6 flex items-center gap-3">
                         <div class="section-icon-container">5</div>
-                        <h2 class="text-xl font-black text-primary">اختيار الجنسية المطلوبة</h2>
+                        <h2 class="text-xl font-black text-primary">Choose Required Nationality</h2>
                     </div>
                     <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'الفلبين', null, this)">
+                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'Philippines', null, this)">
                             <img src="mawanoi-assets/flags/ph.svg" class="h-10 w-14 object-cover rounded-lg shadow-sm border border-gray-100">
-                            <span class="font-bold">الفلبين</span>
+                            <span class="font-bold">Philippines</span>
                         </div>
-                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'الهند', null, this)">
+                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'India', null, this)">
                             <img src="mawanoi-assets/flags/in.svg" class="h-10 w-14 object-cover rounded-lg shadow-sm border border-gray-100">
-                            <span class="font-bold">الهند</span>
+                            <span class="font-bold">India</span>
                         </div>
-                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'إندونيسيا', null, this)">
+                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'Indonesia', null, this)">
                             <img src="mawanoi-assets/flags/id.svg" class="h-10 w-14 object-cover rounded-lg shadow-sm border border-gray-100">
-                            <span class="font-bold">إندونيسيا</span>
+                            <span class="font-bold">Indonesia</span>
                         </div>
-                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'إثيوبيا', null, this)">
+                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'Ethiopia', null, this)">
                             <img src="mawanoi-assets/flags/et.svg" class="h-10 w-14 object-cover rounded-lg shadow-sm border border-gray-100">
-                            <span class="font-bold">إثيوبيا</span>
+                            <span class="font-bold">Ethiopia</span>
                         </div>
-                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'كينيا', null, this)">
+                        <div class="option-card flex flex-col items-center gap-3" onclick="select('nationality', 'Kenya', null, this)">
                             <img src="mawanoi-assets/flags/ke.svg" class="h-10 w-14 object-cover rounded-lg shadow-sm border border-gray-100">
-                            <span class="font-bold">كينيا</span>
+                            <span class="font-bold">Kenya</span>
                         </div>
                     </div>
                 </section>
@@ -386,7 +386,7 @@
                 <section class="rounded-3xl border border-border bg-card/40 p-7">
                     <div class="mb-6 flex items-center gap-3">
                         <div class="section-icon-container">6</div>
-                        <h2 class="text-xl font-black text-primary">تاريخ بدء الخدمة</h2>
+                        <h2 class="text-xl font-black text-primary">Service Start Date</h2>
                     </div>
                     <input type="date" id="start-date" class="w-full p-4 rounded-2xl border-2 border-border focus:border-accent outline-none transition-colors" onchange="updateSummary()">
                 </section>
@@ -395,17 +395,17 @@
             <!-- Summary -->
             <aside>
                 <div class="summary-card">
-                    <h2 class="text-xl font-black text-primary mb-6">ملخّص العقد</h2>
+                    <h2 class="text-xl font-black text-primary mb-6">Contract Summary</h2>
                     <div class="space-y-4">
-                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">مدة العقد</span><b id="sum-duration" class="text-primary">—</b></div>
-                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">الخدمة</span><b id="sum-service" class="text-primary">—</b></div>
-                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">النوع</span><b id="sum-type" class="text-primary">—</b></div>
-                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">الجنسية</span><b id="sum-nationality" class="text-primary">—</b></div>
-                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">عدد العمالة</span><b id="sum-workers" class="text-primary">1</b></div>
-                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">تاريخ البدء</span><b id="sum-date" class="text-primary">—</b></div>
-                        <div class="flex justify-between pt-4"><span class="text-lg font-bold text-primary">المبلغ الإجمالي</span><b id="sum-total" class="text-2xl font-black text-accent">0 د.إ</b></div>
+                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">Duration</span><b id="sum-duration" class="text-primary">—</b></div>
+                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">Service</span><b id="sum-service" class="text-primary">—</b></div>
+                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">Type</span><b id="sum-type" class="text-primary">—</b></div>
+                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">Nationality</span><b id="sum-nationality" class="text-primary">—</b></div>
+                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">Workers</span><b id="sum-workers" class="text-primary">1</b></div>
+                        <div class="flex justify-between border-b border-gray-100 pb-3"><span class="text-muted-foreground">Start Date</span><b id="sum-date" class="text-primary">—</b></div>
+                        <div class="flex justify-between pt-4"><span class="text-lg font-bold text-primary">Total Amount</span><b id="sum-total" class="text-2xl font-black text-accent">0 AED</b></div>
                     </div>
-                    <button class="confirm-btn" onclick="submitOrder()">تأكيد الطلب</button>
+                    <button class="confirm-btn" onclick="submitOrder()">Confirm Order</button>
                 </div>
             </aside>
         </div>
@@ -449,15 +449,15 @@
             document.getElementById('sum-date').innerText = dateVal || '—';
             
             const total = state.price * state.workers;
-            document.getElementById('sum-total').innerText = total.toLocaleString() + ' د.إ';
+            document.getElementById('sum-total').innerText = total.toLocaleString() + ' AED';
         }
 
         function submitOrder() {
             if (!state.duration || !state.service || !state.type || !state.nationality || !document.getElementById('start-date').value) {
-                alert('يرجى اختيار كافة التفاصيل أولاً');
+                alert('Please select all details first');
                 return;
             }
-            alert('تم استلام طلبك بنجاح! سيقوم فريق تدبير بالتواصل معك.');
+            alert('Your request has been received successfully! Tadbeer team will contact you.');
         }
     </script>
 </body>
