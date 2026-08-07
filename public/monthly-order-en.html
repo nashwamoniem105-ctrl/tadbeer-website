@@ -65,6 +65,14 @@
             background: linear-gradient(to right, #152650, #78182b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            white-space: nowrap;
+        }
+        h1 {
+            white-space: nowrap;
+            font-size: 2rem !important; /* Reduced size for English */
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.5rem !important; }
         }
         .section-icon-container {
             width: 40px;
