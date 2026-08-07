@@ -104,7 +104,7 @@ app.post('/api/*', (req, res) => {
       `INSERT INTO leads (full_name, phone, email, city, message, source)
        VALUES ($1, $2, $3, $4, $5, 'hourly')`,
       [b.name || b.fullName || b.contactName || null, b.phone || b.contactPhone || b.phoneNumber || null,
-       b.email || null, b.city || null, JSON.stringify(b), 'hourly']
+       b.email || null, b.city || null, JSON.stringify(b)]
     ).catch((e) => console.warn('lead insert failed:', e.message));
     return res.json({ data: true, status: 200, message: 'تم استلام طلبك وسنتواصل معك' });
   }
