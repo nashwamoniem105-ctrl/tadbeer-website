@@ -44,7 +44,18 @@ async function ensureTables() {
 ensureTables();
 
 // ---------- خدمة الملفات الثابتة ----------
-app.use(express.static(path.join(__dirname, 'public'), { index: 'home.html' }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// مسار إضافي للتعامل مع طلبات Umbraco API المقلدة
+app.get('/api/content/Search/:lang/:page', (req, res) => {
+  const { lang, page } = req.params;
+  const filePath = path.join(__dirname, 'public', 'api', 'content', 'Search', lang, page);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).json({ error: 'Not found' });
+  }
+});
 
 // ---------- API لاستقبال الطلبات ----------
 app.post('/api/leads', async (req, res) => {
