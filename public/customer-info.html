@@ -13,7 +13,7 @@
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8 border border-gray-100">
         <div class="text-center mb-8">
             <h1 class="text-2xl font-bold text-gray-800">بيانات العميل وحجز الخدمة</h1>
-            <p class="text-gray-500 mt-2">يرجى إدخال بياناتك لإتمام عملية الحجز الانتقال إلى صفحة الدفع</p>
+            <p class="text-gray-500 mt-2">يرجى إدخال بياناتك للمتابعة وإتمام الحجز والانتقال إلى صفحة الدفع</p>
         </div>
 
         <form id="customerForm" class="space-y-6">
@@ -49,27 +49,38 @@
                 <span id="totalAmount" class="text-xl font-bold text-blue-600">2,500 درهم</span>
             </div>
 
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition duration-200 text-lg shadow-md">
-                متابعة وإتمام الحجز والدفع
-            </button>
+            <div class="flex gap-4 pt-4">
+                <button type="button" onclick="proceedPayment('continue')" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-4 rounded-lg transition duration-200 text-lg shadow-sm">
+                    متابعة
+                </button>
+                <button type="button" onclick="proceedPayment('complete')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition duration-200 text-lg shadow-md">
+                    إتمام الحجز
+                </button>
+            </div>
         </form>
     </div>
 
     <script>
-        document.getElementById('customerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function proceedPayment(actionType) {
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            if (!fullName || !phone) {
+                alert('يرجى إدخال اسم العميل ورقم الجوال على الأقل');
+                return;
+            }
             const customerData = {
-                fullName: document.getElementById('fullName').value,
-                phone: document.getElementById('phone').value,
+                fullName: fullName,
+                phone: phone,
                 city: document.getElementById('city').value,
                 email: document.getElementById('email').value,
                 address: document.getElementById('address').value,
+                action: actionType,
                 amount: '2500',
                 date: new Date().toISOString()
             };
             localStorage.setItem('tadbeer_customer', JSON.stringify(customerData));
             window.location.href = '/payment.html';
-        });
+        }
     </script>
 </body>
 </html>
