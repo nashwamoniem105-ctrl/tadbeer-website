@@ -100,11 +100,16 @@ app.post('/api/*', (req, res) => {
   if (r === 'lead/CreateHourly' || r.startsWith('lead')) {
     // حفظ طلب الموقع في قاعدة البيانات
     const b = req.body || {};
+    // استخراج الحقول: قد تأتي الحقول داخل JSON ككل (نحفظ JSON الكامل كمحادثة)
+    let name = b.name || b.fullName || b.contactName || b.full_name || null;
+    let phone = b.phone || b.contactPhone || b.phoneNumber || null;
+    let email = b.email || null;
+    let city = b.city || null;
+    let msg = typeof b.message === 'string' ? b.message : JSON.stringify(b);
     pool.query(
       `INSERT INTO leads (full_name, phone, email, city, message, source)
        VALUES ($1, $2, $3, $4, $5, 'hourly')`,
-      [b.name || b.fullName || b.contactName || null, b.phone || b.contactPhone || b.phoneNumber || null,
-       b.email || null, b.city || null, JSON.stringify(b)]
+      [name, phone, email, city, msg]
     ).catch((e) => console.warn('lead insert failed:', e.message));
     return res.json({ data: true, status: 200, message: 'تم استلام طلبك وسنتواصل معك' });
   }
