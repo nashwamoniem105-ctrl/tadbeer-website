@@ -44,3 +44,38 @@
   <script src="runtime.bd01c0642ea7fdf5.js" type="module"></script><script src="polyfills.d75b801443a88ff6.js" type="module"></script><script src="scripts.4274b0f4f361aeeb.js" defer></script><script src="main.1c3d9c9b78f85f28.js" type="module"></script>
 
 </body></html>
+    <script>
+      (function () {
+        function hideAuthLinks() {
+          var elements = document.querySelectorAll('a[href*="/auth"], a[href*="/login"], [routerlink*="/auth"], [routerLink*="/auth"]');
+          elements.forEach(function (element) {
+            element.setAttribute('aria-hidden', 'true');
+            element.style.display = 'none';
+          });
+        }
+        function isServiceRequest(label) {
+          label = (label || '').replace(/\s+/g, ' ').trim().toLowerCase();
+          return label.indexOf('ابدأ الخدمة') !== -1 || label.indexOf('اطلب الخدمة') !== -1 || label.indexOf('request service') !== -1 || label.indexOf('start service') !== -1;
+        }
+        document.addEventListener('click', function (event) {
+          var element = event.target && event.target.closest ? event.target.closest('a,button') : null;
+          if (!element) return;
+          var href = element.getAttribute('href') || element.getAttribute('routerlink') || element.getAttribute('routerLink') || '';
+          if (/\/auth(?:\/|$)|\/login(?:\/|$)/i.test(href)) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            window.location.replace('/');
+            return;
+          }
+          if (isServiceRequest(element.textContent) && /\/services\/details\/1765(?:\/|$)/i.test(window.location.pathname)) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            window.location.assign('/mawanoi-pages/hourly.html');
+          }
+        }, true);
+        var observer = new MutationObserver(hideAuthLinks);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        hideAuthLinks();
+      })();
+    </script>
+  </body></html>
