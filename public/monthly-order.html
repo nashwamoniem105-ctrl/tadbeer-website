@@ -13,8 +13,9 @@
             --gradient-soft: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             background-color: #fafafa;
+            margin: 0;
         }
         .tadbeer-header {
             background: white;
@@ -56,13 +57,54 @@
             font-weight: bold;
             margin-top: 1.5rem;
             transition: opacity 0.2s;
+            border: none;
+            cursor: pointer;
         }
         .confirm-btn:hover {
             opacity: 0.9;
         }
-        .option-selected {
+        .option-card {
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.25rem;
+            text-align: right;
+            position: relative;
+        }
+        .option-card:hover {
+            border-color: rgba(211, 47, 47, 0.4);
+        }
+        .option-card.active {
             border-color: var(--accent) !important;
             background-color: rgba(211, 47, 47, 0.05) !important;
+        }
+        .badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            border-radius: 9999px;
+            padding: 0.125rem 0.625rem;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .badge-gray { background: #f3f4f6; color: var(--accent); }
+        .badge-accent { background: var(--accent); color: white; }
+        
+        .counter-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .counter-value {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 15px;
         }
     </style>
 </head>
@@ -94,82 +136,164 @@
                         <div class="grid h-10 w-10 place-items-center rounded-xl font-black text-white gradient-hero-bg">1</div>
                         <h2 class="text-xl font-black text-primary">اختيار مدة العقد</h2>
                     </div>
-                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="duration-options">
-                        <button class="relative rounded-2xl border-2 p-5 text-right transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'duration', 'أسبوعان')">
-                            <span class="absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-gray-100 text-accent">14 زيارة</span>
+                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div class="option-card" onclick="select('duration', 'أسبوعان', 640, this)">
+                            <span class="badge badge-gray">14 زيارة</span>
                             <div class="text-xl font-black text-primary">أسبوعان</div>
                             <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">640 <span class="text-sm font-bold text-accent">ر.س</span></div>
-                        </button>
-                        <button class="relative rounded-2xl border-2 p-5 text-right transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'duration', 'شهر')">
+                            <div class="text-xl font-black text-primary">640 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        </div>
+                        <div class="option-card" onclick="select('duration', 'شهر', 1280, this)">
                             <div class="text-xl font-black text-primary">شهر</div>
                             <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">1,280 <span class="text-sm font-bold text-accent">ر.س</span></div>
-                        </button>
-                        <button class="relative rounded-2xl border-2 p-5 text-right transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'duration', 'شهران')">
+                            <div class="text-xl font-black text-primary">1,280 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        </div>
+                        <div class="option-card" onclick="select('duration', 'شهران', 2560, this)">
                             <div class="text-xl font-black text-primary">شهران</div>
                             <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
-                            <div class="text-xl font-black text-primary">2,560 <span class="text-sm font-bold text-accent">ر.س</span></div>
-                        </button>
+                            <div class="text-xl font-black text-primary">2,560 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        </div>
+                        <div class="option-card" onclick="select('duration', '3 شهور', 3840, this)">
+                            <div class="text-xl font-black text-primary">3 شهور</div>
+                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
+                            <div class="text-xl font-black text-primary">3,840 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        </div>
+                        <div class="option-card" onclick="select('duration', '6 شهور', 7000, this)">
+                            <div class="text-xl font-black text-primary">6 شهور</div>
+                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
+                            <div class="text-xl font-black text-primary">7,000 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        </div>
+                        <div class="option-card" onclick="select('duration', 'سنة كاملة', 13500, this)">
+                            <span class="badge badge-accent">الأوفر</span>
+                            <div class="text-xl font-black text-primary">سنة كاملة</div>
+                            <div class="mt-2 text-sm text-muted-foreground">السعر الإجمالي</div>
+                            <div class="text-xl font-black text-primary">13,500 <span class="text-sm font-bold text-accent">د.إ</span></div>
+                        </div>
                     </div>
                 </section>
 
-                <!-- 2. Service Type -->
+                <!-- 2. Service -->
                 <section class="rounded-3xl border border-border bg-white p-7 shadow-sm">
                     <div class="mb-6 flex items-center gap-3">
                         <div class="grid h-10 w-10 place-items-center rounded-xl font-black text-white gradient-hero-bg">2</div>
                         <h2 class="text-xl font-black text-primary">اختيار الخدمة المطلوبة</h2>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <button class="flex items-start gap-4 rounded-2xl border-2 p-5 text-right transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'service', 'عاملة منزلية')">
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'عاملة منزلية', null, this)">
                             <div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl gradient-hero-bg text-white">🏠</div>
                             <div>
                                 <h3 class="text-lg font-bold text-primary">عاملة منزلية</h3>
-                                <p class="text-sm text-muted-foreground">تنظيف، غسيل، طبخ</p>
+                                <p class="text-sm text-muted-foreground">تنظيف، غسيل، طبخ، رعاية أطفال</p>
                             </div>
-                        </button>
-                        <button class="flex items-start gap-4 rounded-2xl border-2 p-5 text-right transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'service', 'طبّاخة')">
+                        </div>
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'طبّاخة', null, this)">
                             <div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl gradient-hero-bg text-white">🍳</div>
                             <div>
                                 <h3 class="text-lg font-bold text-primary">طبّاخة</h3>
-                                <p class="text-sm text-muted-foreground">تحضير وجبات متنوّعة</p>
+                                <p class="text-sm text-muted-foreground">تحضير وجبات يومية متنوّعة</p>
                             </div>
-                        </button>
+                        </div>
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'رعاية أطفال', null, this)">
+                            <div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl gradient-hero-bg text-white">👶</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-primary">رعاية أطفال</h3>
+                                <p class="text-sm text-muted-foreground">مربية مدرّبة وموثوقة</p>
+                            </div>
+                        </div>
+                        <div class="option-card flex items-start gap-4" onclick="select('service', 'سائق خاص', null, this)">
+                            <div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl gradient-hero-bg text-white">🚗</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-primary">سائق خاص</h3>
+                                <p class="text-sm text-muted-foreground">توصيل آمن داخل الإمارات</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
-                <!-- 3. Nationality -->
+                <!-- 3. Type -->
                 <section class="rounded-3xl border border-border bg-white p-7 shadow-sm">
                     <div class="mb-6 flex items-center gap-3">
                         <div class="grid h-10 w-10 place-items-center rounded-xl font-black text-white gradient-hero-bg">3</div>
-                        <h2 class="text-xl font-black text-primary">اختيار الجنسية</h2>
+                        <h2 class="text-xl font-black text-primary">نوع الخدمة</h2>
                     </div>
-                    <div class="grid gap-4 grid-cols-2 sm:grid-cols-3">
-                        <button class="flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'nationality', 'الفلبين')">
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div class="option-card" onclick="select('type', 'زيارات', null, this)">
+                            <h3 class="text-lg font-bold text-primary">زيارات</h3>
+                            <p class="text-sm text-muted-foreground">دوام نهاري بدون مبيت</p>
+                        </div>
+                        <div class="option-card" onclick="select('type', 'مبيت', null, this)">
+                            <h3 class="text-lg font-bold text-primary">مبيت</h3>
+                            <p class="text-sm text-muted-foreground">إقامة كاملة لدى الأسرة</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Workers Count -->
+                <section class="rounded-3xl border border-border bg-white p-7 shadow-sm">
+                    <div class="mb-6 flex items-center gap-3">
+                        <div class="grid h-10 w-10 place-items-center rounded-xl font-black text-white gradient-hero-bg">4</div>
+                        <h2 class="text-xl font-black text-primary">عدد العمالة المطلوب</h2>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="counter-btn" onclick="updateWorkers(-1)">−</button>
+                        <span class="counter-value" id="workers-count">1</span>
+                        <button class="counter-btn" onclick="updateWorkers(1)">+</button>
+                        <span class="mr-4 text-muted-foreground">عامل/عاملة</span>
+                    </div>
+                </section>
+
+                <!-- 5. Nationality -->
+                <section class="rounded-3xl border border-border bg-white p-7 shadow-sm">
+                    <div class="mb-6 flex items-center gap-3">
+                        <div class="grid h-10 w-10 place-items-center rounded-xl font-black text-white gradient-hero-bg">5</div>
+                        <h2 class="text-xl font-black text-primary">اختيار الجنسية المطلوبة</h2>
+                    </div>
+                    <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+                        <div class="option-card flex flex-col items-center gap-2" onclick="select('nationality', 'الفلبين', null, this)">
                             <img src="mawanoi-assets/flags/ph.svg" class="h-8 w-12 object-cover rounded shadow-sm">
                             <span class="font-bold">الفلبين</span>
-                        </button>
-                        <button class="flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'nationality', 'الهند')">
+                        </div>
+                        <div class="option-card flex flex-col items-center gap-2" onclick="select('nationality', 'الهند', null, this)">
                             <img src="mawanoi-assets/flags/in.svg" class="h-8 w-12 object-cover rounded shadow-sm">
                             <span class="font-bold">الهند</span>
-                        </button>
-                        <button class="flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all border-border hover:border-accent/40" onclick="selectOption(this, 'nationality', 'إثيوبيا')">
+                        </div>
+                        <div class="option-card flex flex-col items-center gap-2" onclick="select('nationality', 'إندونيسيا', null, this)">
+                            <img src="mawanoi-assets/flags/id.svg" class="h-8 w-12 object-cover rounded shadow-sm">
+                            <span class="font-bold">إندونيسيا</span>
+                        </div>
+                        <div class="option-card flex flex-col items-center gap-2" onclick="select('nationality', 'إثيوبيا', null, this)">
                             <img src="mawanoi-assets/flags/et.svg" class="h-8 w-12 object-cover rounded shadow-sm">
                             <span class="font-bold">إثيوبيا</span>
-                        </button>
+                        </div>
+                        <div class="option-card flex flex-col items-center gap-2" onclick="select('nationality', 'كينيا', null, this)">
+                            <img src="mawanoi-assets/flags/ke.svg" class="h-8 w-12 object-cover rounded shadow-sm">
+                            <span class="font-bold">كينيا</span>
+                        </div>
                     </div>
+                </section>
+
+                <!-- 6. Date -->
+                <section class="rounded-3xl border border-border bg-white p-7 shadow-sm">
+                    <div class="mb-6 flex items-center gap-3">
+                        <div class="grid h-10 w-10 place-items-center rounded-xl font-black text-white gradient-hero-bg">6</div>
+                        <h2 class="text-xl font-black text-primary">تاريخ بدء الخدمة</h2>
+                    </div>
+                    <input type="date" id="start-date" class="w-full p-4 rounded-xl border-2 border-border focus:border-primary outline-none" onchange="updateSummary()">
                 </section>
             </div>
 
-            <!-- Summary Sidebar -->
+            <!-- Summary -->
             <aside class="space-y-6">
                 <div class="rounded-3xl border border-border bg-white p-7 shadow-lg sticky top-24">
                     <h2 class="text-xl font-black text-primary mb-6">ملخّص العقد</h2>
                     <div class="space-y-4 text-sm">
                         <div class="flex justify-between border-b pb-2"><span>مدة العقد</span><b id="sum-duration">—</b></div>
                         <div class="flex justify-between border-b pb-2"><span>الخدمة</span><b id="sum-service">—</b></div>
+                        <div class="flex justify-between border-b pb-2"><span>النوع</span><b id="sum-type">—</b></div>
                         <div class="flex justify-between border-b pb-2"><span>الجنسية</span><b id="sum-nationality">—</b></div>
-                        <div class="flex justify-between pt-4"><span class="text-lg font-bold">المبلغ الإجمالي</span><b id="sum-total" class="text-lg font-black text-accent">0 ر.س</b></div>
+                        <div class="flex justify-between border-b pb-2"><span>عدد العمالة</span><b id="sum-workers">1</b></div>
+                        <div class="flex justify-between border-b pb-2"><span>تاريخ البدء</span><b id="sum-date">—</b></div>
+                        <div class="flex justify-between pt-4"><span class="text-lg font-bold text-primary">المبلغ الإجمالي</span><b id="sum-total" class="text-lg font-black text-accent">0 د.إ</b></div>
                     </div>
                     <button class="confirm-btn" onclick="submitOrder()">تأكيد الطلب</button>
                 </div>
@@ -178,36 +302,48 @@
     </section>
 
     <script>
-        const selection = {
+        const state = {
             duration: '',
             service: '',
+            type: '',
             nationality: '',
-            total: 0
+            workers: 1,
+            price: 0,
+            date: ''
         };
 
-        function selectOption(el, type, value) {
-            // Remove selection from siblings
-            const buttons = el.parentElement.querySelectorAll('button');
-            buttons.forEach(b => b.classList.remove('option-selected'));
+        function select(field, value, price, el) {
+            const siblings = el.parentElement.children;
+            for (let s of siblings) s.classList.remove('active');
+            el.classList.add('active');
             
-            // Add selection to clicked
-            el.classList.add('option-selected');
-            selection[type] = value;
+            state[field] = value;
+            if (price !== null) state.price = price;
+            updateSummary();
+        }
 
-            // Update summary
-            document.getElementById('sum-' + type).innerText = value;
+        function updateWorkers(delta) {
+            state.workers = Math.max(1, state.workers + delta);
+            document.getElementById('workers-count').innerText = state.workers;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            document.getElementById('sum-duration').innerText = state.duration || '—';
+            document.getElementById('sum-service').innerText = state.service || '—';
+            document.getElementById('sum-type').innerText = state.type || '—';
+            document.getElementById('sum-nationality').innerText = state.nationality || '—';
+            document.getElementById('sum-workers').innerText = state.workers;
             
-            // Dummy price calculation
-            if (type === 'duration') {
-                if (value === 'أسبوعان') selection.total = 640;
-                if (value === 'شهر') selection.total = 1280;
-                if (value === 'شهران') selection.total = 2560;
-                document.getElementById('sum-total').innerText = selection.total + ' ر.س';
-            }
+            const dateVal = document.getElementById('start-date').value;
+            document.getElementById('sum-date').innerText = dateVal || '—';
+            
+            const total = state.price * state.workers;
+            document.getElementById('sum-total').innerText = total.toLocaleString() + ' د.إ';
         }
 
         function submitOrder() {
-            if (!selection.duration || !selection.service || !selection.nationality) {
+            if (!state.duration || !state.service || !state.type || !state.nationality || !document.getElementById('start-date').value) {
                 alert('يرجى اختيار كافة التفاصيل أولاً');
                 return;
             }
