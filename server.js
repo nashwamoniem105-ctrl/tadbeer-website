@@ -123,7 +123,7 @@ app.get('/admin', (req, res) => {
   res.status(404).send('Admin panel not found');
 });
 
-// SPA Fallback: Serve home.html for any non-API route
+// SPA Fallback: Serve home.html for any non-API route (Triggering redeploy)
 app.get('*', (req, res) => {
   if (req.accepts('html')) {
     return res.sendFile(path.join(__dirname, 'public', 'home.html'));
