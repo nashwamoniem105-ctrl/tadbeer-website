@@ -1,0 +1,19 @@
+{
+  "name": "tadbeer-website",
+  "version": "1.0.0",
+  "description": "موقع شركة تدبير للاستقدام - نسخة مستقلة ومنظفة",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5"
+  }
+}

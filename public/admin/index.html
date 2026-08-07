@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة التحكم — تدبير</title>
+<style>
+  :root { --primary:#8a9d2a; --dark:#2d3417; --bg:#f5f6f0; --card:#fff; --text:#333; --muted:#777; --border:#e3e3d8; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Somar", "Segoe UI", Tahoma, sans-serif; background: var(--bg); color: var(--text); direction: rtl; }
+  header { background: var(--dark); color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 1.25rem; }
+  header a { color: #fff; text-decoration: none; opacity: .8; font-size: .9rem; }
+  main { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+  .stat .n { font-size: 1.8rem; font-weight: bold; color: var(--primary); }
+  .stat .l { color: var(--muted); font-size: .85rem; margin-top: .25rem; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  th, td { padding: .75rem 1rem; text-align: right; border-bottom: 1px solid var(--border); font-size: .9rem; vertical-align: top; }
+  th { background: var(--dark); color: #fff; }
+  .badge { display: inline-block; padding: .15rem .6rem; border-radius: 999px; font-size: .75rem; }
+  .b-new { background:#eef3dc; color:#4d5a12; }
+  .b-in_progress { background:#dfe9fa; color:#1d4e96; }
+  .b-done { background:#e0f2e1; color:#1b5e20; }
+  .b-rejected { background:#fdecea; color:#b71c1c; }
+  select, button { font-family: inherit; font-size: .85rem; }
+  .actions button { margin: 0 .2rem; padding: .3rem .7rem; border: 1px solid var(--border); background: #fff; border-radius: 6px; cursor: pointer; }
+  .actions button.del { color:#b71c1c; border-color:#f2b8b4; }
+  #login { max-width: 360px; margin: 6rem auto; background: var(--card); border:1px solid var(--border); border-radius: 12px; padding: 2rem; text-align: center; }
+  #login input { width: 100%; padding: .6rem; margin: .75rem 0; border: 1px solid var(--border); border-radius: 8px; text-align: center; }
+  #login button, .refresh { background: var(--primary); color:#fff; border: none; padding: .6rem 1.5rem; border-radius: 8px; cursor: pointer; }
+  .empty { text-align: center; color: var(--muted); padding: 3rem; }
+  .hidden { display: none !important; }
+  @media (max-width: 700px) { th:nth-child(3), td:nth-child(3) { display:none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>لوحة التحكم — استقبال الطلبات</h1>
+  <a href="/">العودة للموقع</a>
+</header>
+
+<main id="app">
+  <div id="login">
+    <h2>تسجيل الدخول</h2>
+    <p style="color:var(--muted); font-size:.85rem; margin-top:.5rem">أدخل كلمة مرور لوحة التحكم</p>
+    <input type="password" id="pwd" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()">
+    <br>
+    <button onclick="doLogin()">دخول</button>
+    <p id="err" style="color:#b71c1c; margin-top:.75rem; font-size:.85rem"></p>
+  </div>
+
+  <div id="panel" class="hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem">
+      <div class="stats" style="flex:1; margin-bottom:0">
+        <div class="stat"><div class="n" id="sAll">0</div><div class="l">إجمالي الطلبات</div></div>
+        <div class="stat"><div class="n" id="sNew">0</div><div class="l">جديدة</div></div>
+        <div class="stat"><div class="n" id="sProg">0</div><div class="l">قيد المتابعة</div></div>
+        <div class="stat"><div class="n" id="sDone">0</div><div class="l">مكتملة</div></div>
+      </div>
+      <button class="refresh" onclick="load()" style="margin-right:1rem">تحديث</button>
+    </div>
+    <div id="tableWrap"></div>
+  </div>
+</main>
+
+<script>
+const TOKEN = 'tadbeer-admin-2026'; // كلمة المرور الافتراضية (يمكن تغييرها بمتغير ADMIN_PASSWORD)
+let token = localStorage.getItem('admin_token') || TOKEN;
+
+function doLogin() {
+  const v = document.getElementById('pwd').value.trim();
+  fetch('/api/admin/auth', { headers: { Authorization: `Bearer ${v}` } })
+    .then(r => r.json()).then(d => {
+      if (d.ok) { token = v; localStorage.setItem('admin_token', v); showPanel(); }
+      else document.getElementById('err').textContent = 'كلمة المرور غير صحيحة';
+    }).catch(e => document.getElementById('err').textContent = 'تعذر الاتصال بالخادم');
+}
+
+function showPanel() {
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('panel').classList.remove('hidden');
+  load();
+}
+
+function esc(s) { return (s == null ? '' : String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function statusBadge(s) {
+  const labels = { new:'جديد', in_progress:'قيد المتابعة', done:'مكتمل', rejected:'مرفوض' };
+  return `<span class="badge b-${s}">${labels[s] || s}</span>`;
+}
+
+async function load() {
+  const rows = await fetch('/api/admin/leads', { headers: { Authorization: `Bearer ${token}` } }).then(r => {
+    if (r.status === 401) { localStorage.removeItem('admin_token'); location.reload(); return []; }
+    return r.json();
+  });
+  document.getElementById('sAll').textContent = rows.length;
+  document.getElementById('sNew').textContent = rows.filter(r => r.status === 'new').length;
+  document.getElementById('sProg').textContent = rows.filter(r => r.status === 'in_progress').length;
+  document.getElementById('sDone').textContent = rows.filter(r => r.status === 'done').length;
+
+  if (rows.length === 0) {
+    document.getElementById('tableWrap').innerHTML = '<div class="empty">لا توجد طلبات حتى الآن</div>';
+    return;
+  }
+  let html = `<table><thead><tr>
+    <th>#</th><th>الاسم</th><th>الجوال</th><th>البريد</th><th>المدينة</th><th>الرسالة</th><th>الحالة</th><th>التاريخ</th><th>إجراءات</th>
+  </tr></thead><tbody>`;
+  for (const r of rows) {
+    html += `<tr>
+      <td>${r.id}</td>
+      <td>${esc(r.full_name)}</td>
+      <td dir="ltr" style="text-align:right">${esc(r.phone)}</td>
+      <td>${esc(r.email)}</td>
+      <td>${esc(r.city)}</td>
+      <td style="max-width:240px; font-size:.8rem">${esc(r.message).slice(0, 300)}</td>
+      <td>${statusBadge(r.status)}</td>
+      <td style="font-size:.8rem">${new Date(r.created_at).toLocaleString('ar-SA')}</td>
+      <td class="actions">
+        <select onchange="updateStatus(${r.id}, this.value)" style="padding:.25rem">
+          ${['new','in_progress','done','rejected'].map(s => `<option value="${s}" ${s===r.status?'selected':''}>${({new:'جديد',in_progress:'قيد المتابعة',done:'مكتمل',rejected:'مرفوض'})[s]}</option>`).join('')}
+        </select>
+        <button class="del" onclick="del(${r.id})">حذف</button>
+      </td>
+    </tr>`;
+  }
+  html += '</tbody></table>';
+  document.getElementById('tableWrap').innerHTML = html;
+}
+
+async function updateStatus(id, status) {
+  await fetch(`/api/admin/leads/${id}`, { method: 'PATCH', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) });
+  load();
+}
+
+async function del(id) {
+  if (!confirm('هل تريد حذف هذا الطلب؟')) return;
+  await fetch(`/api/admin/leads/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+  load();
+}
+
+// دخول تلقائي بكلمة المرور الافتراضية إن كانت موجودة
+fetch('/api/admin/auth', { headers: { Authorization: `Bearer ${token}` } })
+  .then(r => r.json()).then(d => { if (d.ok) showPanel(); });
+</script>
+</body>
+</html>
